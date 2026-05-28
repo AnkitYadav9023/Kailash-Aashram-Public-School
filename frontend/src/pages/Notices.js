@@ -32,9 +32,9 @@ export default function Notices() {
   return (
     <div className="page-wrapper">
       <PageHeader
-        tag="Suchnayen"
+        tag="Notices"
         title="Notices & Announcements"
-        subtitle="School ki taraf se sabhi important notices aur circulars yahan milenge."
+        subtitle="All important notices and circulars from the school will be available here."
       />
 
       <section style={{ padding: '56px 0' }}>
@@ -94,15 +94,30 @@ export default function Notices() {
                   </span>
                 </div>
                 {n.file_url && (
-                  <a href={n.file_url} target="_blank" rel="noreferrer" style={{
-                    display: 'flex', alignItems: 'center', gap: 6,
-                    background: 'rgba(201,151,58,0.1)', color: 'var(--gold)',
-                    border: '1px solid rgba(201,151,58,0.3)',
-                    padding: '7px 14px', borderRadius: 8,
-                    fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0
-                  }}>
-                    📥 Download
-                  </a>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0 }}>
+                    {/* View Button */}
+                    <a href={n.file_url} target="_blank" rel="noreferrer" style={{
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      background: 'rgba(201,151,58,0.1)', color: 'var(--gold)',
+                      border: '1px solid rgba(201,151,58,0.3)',
+                      padding: '7px 14px', borderRadius: 8,
+                      fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap',
+                      textDecoration: 'none',
+                    }}>
+                      👁️ View
+                    </a>
+                    {/* Download Button */}
+                    <a href={n.file_url} download target="_blank" rel="noreferrer" style={{
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      background: 'rgba(11,31,58,0.06)', color: 'var(--navy)',
+                      border: '1px solid rgba(11,31,58,0.15)',
+                      padding: '7px 14px', borderRadius: 8,
+                      fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap',
+                      textDecoration: 'none',
+                    }}>
+                      📥 Download
+                    </a>
+                  </div>
                 )}
               </div>
             ))}

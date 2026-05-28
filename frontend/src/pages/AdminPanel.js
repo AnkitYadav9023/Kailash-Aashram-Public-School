@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const ADMIN_PASSWORD = 'Ashok@123';
-const API = 'https://kailash-aashram-public-school.vercel.app/api';
+const API = 'https://kailash-aashram-public-school-ug9v.vercel.app/api';
 
 export default function AdminPanel() {
   const [auth, setAuth]       = useState(false);

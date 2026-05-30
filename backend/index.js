@@ -13,6 +13,7 @@ app.use(express.json());
 app.use('/api/notices',   require('./routes/notices'));
 app.use('/api/gallery',   require('./routes/gallery'));
 app.use('/api/downloads', require('./routes/downloads'));
+app.use('/api/reviews', require('./routes/reviews'));
 
 app.get('/', (req, res) => {
   res.json({ message: '✅ School backend is running!' });

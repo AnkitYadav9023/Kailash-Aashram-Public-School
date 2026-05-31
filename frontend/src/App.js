@@ -21,7 +21,7 @@ function App() {
         <Route path="/fees"        element={<FeeStructure />} />
         <Route path="/facilities"  element={<Facilities />} />
         <Route path="/contact"     element={<Contact />} />
-        <Route path="/manage-k9x2q7" element={<AdminPanel />} />      
+        <Route path="/admin" element={<AdminPanel />} />      
       </Routes>
       <Footer />
     </BrowserRouter>

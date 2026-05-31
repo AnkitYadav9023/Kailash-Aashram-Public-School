@@ -13,14 +13,119 @@ const stats = [
   { num: 'Nursery - 8', label: 'Classes Offered' },
 ];
 
-const reviews = [
-  { name: 'Ramesh Sharma', role: 'Father of Class 6 Student', initials: 'RS', color: '#3C3489', bg: '#EEEDFE',
-    text: 'My son joined this school 3 years ago in Class 3. Today his confidence and academic performance have improved tremendously. The teachers are very caring and dedicated.', stars: 4 },
-  { name: 'Priya Devi', role: 'Mother of Class 8 ', initials: 'PD', color: '#0F6E56', bg: '#E1F5EE',
-    text: 'My daughter studied here and performed exceptionally well. The school has a very strong academic foundation and the staff is always sMPportive.', stars: 5 },
-  { name: 'Anil Kumar', role: 'Father of Class 7 Student', initials: 'AK', color: '#185FA5', bg: '#E6F1FB',
-    text: 'The bus service is excellent. Children are safe and arrive home on time. The school communication system is also very good — every notice is sent on the phone.', stars: 5 },
-];
+const [reviews, setReviews] = useState([]);
+
+useEffect(() => {
+  fetch(`${process.env.REACT_APP_API}/reviews`)
+    .then(res => res.json())
+    .then(data => setReviews(data))
+    .catch(() => {});
+}, []);
+
+{/* ── REVIEW FORM ── */}
+<section style={{ background: 'var(--light)', padding: '64px 0' }}>
+  <div className="section-inner">
+    <div style={{ maxWidth: 600, margin: '0 auto' }}>
+      <div style={{ textAlign: 'center', marginBottom: 32 }}>
+        <span className="section-tag">Share Your Experience</span>
+        <h2 className="section-title">Write a Review</h2>
+        <p style={{ fontSize: 14, color: 'var(--gray)' }}>
+          Your review will be visible after admin approval.
+        </p>
+      </div>
+      <ReviewForm />
+    </div>
+  </div>
+</section>
+
+function ReviewForm() {
+  const [form, setForm]   = useState({ name: '', role: '', review: '', stars: 5 });
+  const [sent, setSent]   = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!form.name || !form.review) return alert('Name and review required!');
+    setLoading(true);
+    await fetch(`${process.env.REACT_APP_API}/reviews`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    });
+    setLoading(false);
+    setSent(true);
+  };
+
+  if (sent) {
+    return (
+      <div style={{ textAlign: 'center', padding: '40px', background: '#fff', borderRadius: 16, border: '1px solid var(--border)' }}>
+        <div style={{ fontSize: 48, marginBottom: 16 }}>🎉</div>
+        <h3 style={{ fontFamily: "'Playfair Display',serif", color: 'var(--navy)', marginBottom: 8 }}>
+          Thank You!
+        </h3>
+        <p style={{ fontSize: 14, color: 'var(--gray)' }}>
+          Your review has been submitted and will appear after approval.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ background: '#fff', borderRadius: 16, padding: 32, border: '1px solid var(--border)' }}>
+      {/* Star Rating */}
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--navy)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 8 }}>
+          Rating *
+        </label>
+        <div style={{ display: 'flex', gap: 6 }}>
+          {[1,2,3,4,5].map(s => (
+            <button key={s} onClick={() => setForm({ ...form, stars: s })} style={{
+              fontSize: 28, background: 'none', border: 'none', cursor: 'pointer',
+              color: s <= form.stars ? 'var(--gold)' : '#D1D5DB',
+              transition: 'color 0.15s',
+            }}>★</button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+        <div>
+          <label style={rLabelStyle}>Your Name *</label>
+          <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
+            placeholder="e.g. Ramesh Sharma" style={rInputStyle} />
+        </div>
+        <div>
+          <label style={rLabelStyle}>Your Role</label>
+          <input value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}
+            placeholder="e.g. Father of Class 7 Student" style={rInputStyle} />
+        </div>
+      </div>
+
+      <div style={{ marginBottom: 20 }}>
+        <label style={rLabelStyle}>Your Review *</label>
+        <textarea value={form.review} onChange={e => setForm({ ...form, review: e.target.value })}
+          placeholder="Share your experience with the school..."
+          rows={4} style={{ ...rInputStyle, resize: 'vertical', lineHeight: 1.6 }} />
+      </div>
+
+      <button onClick={handleSubmit} disabled={loading} className="btn-gold" style={{ width: '100%', padding: '13px', fontSize: 15 }}>
+        {loading ? 'Submitting...' : 'Submit Review →'}
+      </button>
+    </div>
+  );
+}
+
+const rInputStyle = {
+  width: '100%', padding: '11px 14px',
+  border: '1.5px solid #E5E7EB', borderRadius: 8,
+  fontSize: 14, fontFamily: "'DM Sans',sans-serif",
+  background: '#FAFAF9', boxSizing: 'border-box',
+};
+
+const rLabelStyle = {
+  display: 'block', fontSize: 11, fontWeight: 700,
+  color: 'var(--navy)', textTransform: 'uppercase',
+  letterSpacing: '0.06em', marginBottom: 6,
+};
 
 function FadeIn({ children, delay = 0 }) {
   const ref = useRef();
